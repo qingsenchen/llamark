@@ -1,0 +1,1 @@
+import"./style-bvsOU_V-.js";import{d as r,E as t,r as e,n as m,f as s}from"./utils-kAulCAqd.js";import{h as a}from"./index-oeAIlbQs.js";import{g as n}from"./index-VNEmAMfg.js";import"./default-QVBxBFzO.js";r(()=>t.make().config(o=>{o.set(e,document.getElementById("app"))}).config(m).enableInspector().use(s).use(n).use(a).create());

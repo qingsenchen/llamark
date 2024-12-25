@@ -1,0 +1,69 @@
+{
+  "name": "@milkdown/ctx",
+  "type": "module",
+  "version": "7.5.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Milkdown/milkdown.git",
+    "directory": "packages/ctx"
+  },
+  "keywords": [
+    "milkdown",
+    "prosemirror",
+    "remark",
+    "markdown",
+    "wysiwyg",
+    "text editor",
+    "markdown editor"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "main": "./lib/index.es.js",
+    "types": "./lib/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./lib/index.es.js",
+        "types": "./lib/index.d.ts"
+      }
+    }
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "start": "concurrently -n es,dts \"vite build --watch\"  \"tsc --emitDeclarationOnly --watch\"",
+    "test": "vitest",
+    "tsc": "tsc --noEmit && echo",
+    "build": "tsc --emitDeclarationOnly && vite build"
+  },
+  "dependencies": {
+    "@milkdown/exception": "workspace:*",
+    "tslib": "^2.5.0"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": [
+          "{projectRoot}/lib"
+        ],
+        "dependsOn": [
+          "build"
+        ]
+      },
+      "tsc": {
+        "outputs": [],
+        "dependsOn": [
+          "build"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "prepare": {
+      "dependsOn": ["^prepare"],
+      "cache": true
+    },
+    "package": {
+      "dependsOn": ["^package"],
+      "cache": true
+    },
+    "test": {
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    },
+    "tsc": {
+      "cache": true
+    },
+    "e2e": {
+      "cache": true
+    },
+    "build-storybook": {
+      "cache": true
+    }
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": ["{workspaceRoot}/vite.config.ts"],
+    "production": ["default"]
+  },
+  "nxCloudAccessToken": "YTAwYWM5ZDgtOGM3OC00YTQwLThlZjUtNjQwZWE5NzUxZjk4fHJlYWQ=",
+  "plugins": [
+    {
+      "plugin": "@nx/storybook/plugin",
+      "options": {
+        "buildStorybookTargetName": "build-storybook",
+        "serveStorybookTargetName": "storybook",
+        "testStorybookTargetName": "test-storybook",
+        "staticStorybookTargetName": "static-storybook"
+      }
+    },
+    {
+      "plugin": "@nx/cypress/plugin",
+      "options": {
+        "targetName": "e2e",
+        "openTargetName": "e2e-open",
+        "componentTestingTargetName": "component-test",
+        "ciTargetName": "e2e-ci"
+      }
+    }
+  ]
+}

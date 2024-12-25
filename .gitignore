@@ -1,0 +1,57 @@
+# Node modules
+node_modules/
+
+# pnpm specific
+.pnpm/
+.pnpm-debug.log
+pnpm-lock.yaml
+
+# Logs
+*.log
+
+# Dependency directories
+**/node_modules/
+**/dist/
+**/build/
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+
+# IDE/editor specific files
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.iml
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# npm package-lock
+package-lock.json
+
+# Testing and coverage reports
+coverage/
+test-results/
+
+# JetBrains project files
+.idea/
+
+# VS Code workspace settings
+.vscode/
+
+# pnpm store (local pnpm cache)
+.pnpm-store/
+
+# TypeScript/JS build directories
+/dist
+/build
+
+
+.nx/
+
+out/
+models/

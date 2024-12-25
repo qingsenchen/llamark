@@ -1,0 +1,64 @@
+{
+  "name": "@milkdown/e2e",
+  "version": "7.5.3",
+  "private": true,
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "serve lib --listen 4173 -L",
+    "test": "nx cypress:e2e",
+    "test:verbose": "nx open-cypress"
+  },
+  "dependencies": {
+    "@codemirror/commands": "^6.3.3",
+    "@codemirror/language-data": "^6.4.1",
+    "@codemirror/state": "^6.4.1",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "@codemirror/view": "^6.26.0",
+    "@milkdown/core": "workspace:*",
+    "@milkdown/ctx": "workspace:*",
+    "@milkdown/plugin-automd": "workspace:*",
+    "@milkdown/plugin-clipboard": "workspace:*",
+    "@milkdown/plugin-cursor": "workspace:*",
+    "@milkdown/plugin-emoji": "workspace:*",
+    "@milkdown/plugin-history": "workspace:*",
+    "@milkdown/plugin-listener": "workspace:*",
+    "@milkdown/plugin-math": "workspace:*",
+    "@milkdown/plugin-tooltip": "workspace:*",
+    "@milkdown/preset-commonmark": "workspace:*",
+    "@milkdown/preset-gfm": "workspace:*",
+    "@milkdown/prose": "workspace:*",
+    "@milkdown/theme-nord": "workspace:*",
+    "@milkdown/utils": "workspace:*",
+    "atomico": "^1.75.1",
+    "katex": "^0.16.0",
+    "tslib": "^2.5.0"
+  },
+  "devDependencies": {
+    "cypress": "^13.0.0",
+    "serve": "^14.2.3"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": [
+          "{projectRoot}/lib"
+        ],
+        "dependsOn": [
+          "build"
+        ]
+      },
+      "preview": {
+        "dependsOn": [
+          "build"
+        ]
+      },
+      "serve": {
+        "dependsOn": [
+          "build"
+        ]
+      }
+    }
+  }
+}

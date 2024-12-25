@@ -1,0 +1,76 @@
+{
+  "name": "@milkdown/transformer",
+  "type": "module",
+  "version": "7.5.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Milkdown/milkdown.git",
+    "directory": "packages/transformer"
+  },
+  "keywords": [
+    "milkdown",
+    "prosemirror",
+    "remark",
+    "markdown"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "main": "./src/index.ts",
+  "publishConfig": {
+    "main": "./lib/index.es.js",
+    "types": "./lib/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./lib/index.es.js",
+        "types": "./lib/index.d.ts"
+      }
+    }
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "scripts": {
+    "start": "concurrently -n es,dts \"vite build --watch\"  \"tsc --emitDeclarationOnly --watch\"",
+    "test": "vitest",
+    "tsc": "tsc --noEmit && echo",
+    "build": "tsc --emitDeclarationOnly && vite build"
+  },
+  "peerDependencies": {
+    "@milkdown/prose": "^7.2.0"
+  },
+  "dependencies": {
+    "@milkdown/exception": "workspace:*",
+    "remark": "^15.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-stringify": "^11.0.0",
+    "tslib": "^2.5.0",
+    "unified": "^11.0.3"
+  },
+  "devDependencies": {
+    "@milkdown/prose": "workspace:*"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": [
+          "{projectRoot}/lib"
+        ],
+        "dependsOn": [
+          "build"
+        ]
+      },
+      "tsc": {
+        "outputs": [],
+        "dependsOn": [
+          "build"
+        ]
+      }
+    }
+  }
+}
