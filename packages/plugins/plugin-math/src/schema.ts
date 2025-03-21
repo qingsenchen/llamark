@@ -8,6 +8,8 @@ import { Fragment } from '@milkdown/prose/model'
 import { InputRule } from '@milkdown/prose/inputrules'
 import { expectDomTypeError } from '@milkdown/exception'
 import { nodeRule } from '@milkdown/prose'
+import { llamarkInputRules } from '@milkdown/prose'
+import { NodeSelection } from '@milkdown/prose/state'
 
 
   
@@ -46,12 +48,16 @@ import { nodeRule } from '@milkdown/prose'
   /// ```markdown
   /// $a^2 + b^2 = c^2$
   /// ```
-  export const mathInlineSchema = $nodeSchema('math_inline', ctx => ({
+  export const mathInlineSchema = $nodeSchema(mathInlineId, ctx => ({
     group: 'inline',
     content: 'text*',
     inline: true,
-    atom: false,
-    draggable: false,
+    atom: true,
+    attrs: {
+      formula: {
+        default: '',
+      },
+    },
     parseDOM: [
       {
         tag: `span[data-type="${mathInlineId}"]`,
@@ -64,7 +70,8 @@ import { nodeRule } from '@milkdown/prose'
       },
     ],
     toDOM: (node) => {
-      const code: string = node.textContent
+      debugger
+      const code: string = node.attrs.formula
       const dom = document.createElement('span')
       dom.dataset.type = mathInlineId
       dom.dataset.value = code
@@ -83,7 +90,7 @@ import { nodeRule } from '@milkdown/prose'
     toMarkdown: {
       match: node => node.type.name === mathInlineId,
       runner: (state, node) => {
-        state.addNode('inlineMath', undefined, node.textContent)
+        state.addNode('inlineMath', undefined, node.attrs.formula)
       },
     },
   }))
@@ -97,13 +104,82 @@ import { nodeRule } from '@milkdown/prose'
   
   /// Input rule for inline math.
   /// When you type $E=MC^2$, it will create an inline math node.
-  export const mathInlineInputRule = $inputRule(ctx =>
-    nodeRule(/(?:\$)([^$]+)(?:\$)$/, mathInlineSchema.type(ctx), {
-      beforeDispatch: ({ tr, match, start }) => {
-        tr.insertText(match[1] ?? '', start + 1)
-      },
-    }),
-  )
+  // export const mathInlineInputRule = $inputRule(ctx =>
+  //   nodeRule(/(?:\$)([^$]+)(?:\$)$/, mathInlineSchema.type(ctx), {
+  //     beforeDispatch: ({ tr, match, start, end }) => {
+  //       tr.insertText(match[1] ?? '', start+1)
+  //       // tr.replaceRangeWith(
+  //       //   start+1, end,
+  //       //   mathInlineSchema.type(ctx).create({}, mathInlineSchema.type(ctx).schema.text(match[1] ?? '')))
+        
+  //     },
+  //   }),
+  // )
+
+  export const mathInlineInputRule = $inputRule(ctx => new InputRule(
+    /(?:\$)([^$]+)(?:\$)$/,
+    (state, _match, start, end) => {
+      
+      const $start = state.doc.resolve(start)
+
+      if ($start.node().type.name === mathInlineId) return null
+
+      let tr = state.tr.delete(start, end).replaceSelectionWith(mathInlineSchema.type(ctx).create({ formula: _match[1] }, 
+        state.schema.text(_match[0] ?? '')))
+
+      tr.setSelection(NodeSelection.create(tr.doc, start))
+      
+      return tr
+    },
+  ))
+
+  // export const mathInlineInputRule = llamarkInputRules(new InputRule(
+  //   /(?:\$)([^$]+)(?:\$)$/,
+  //   (state, _match, start, end) => {
+      
+  //     const $start = state.doc.resolve(start)
+
+  //     if ($start.node().type.name === mathInlineId) return null
+
+  //     let tr = state.tr.delete(start, end).replaceSelectionWith(mathInlineSchema.type(ctx).create({ formula: _match[1] }, 
+  //       state.schema.text(_match[0] ?? '')))
+
+  //     tr.setSelection(NodeSelection.create(tr.doc, start))
+      
+  //     return tr
+  //   },
+  // ))
+
+  
+
+  // export const mathInlineInputRule = $inputRule(ctx => new InputRule(
+  //   /(?:\$)([^$]+)(?:\$)$/,
+  //   (state, _match, start, end) => {
+  //     const $start = state.doc.resolve(start)
+      
+  //     if (!$start.node(-1).canReplaceWith($start.index(-1), $start.indexAfter(-1), mathInlineSchema.type(ctx)))
+  //       return null
+  //     return state.tr.insertText(_match[1] ?? '', start + 1)
+  //     //return state.tr.delete(start, start+2).insertText(_match[2] ?? '', start+2).setBlockType(start, end, mathBlockSchema.type(ctx))
+  //   },
+  // ))
+
+  // export const mathInlineInputRulenew InputRule(pattern, (state, match, start, end) => {
+	// 	let $start = state.doc.resolve(start);
+	// 	let index = $start.index();
+	// 	let $end = state.doc.resolve(end);
+	// 	// get attrs
+	// 	let attrs = getAttrs instanceof Function ? getAttrs(match) : getAttrs
+	// 	// check if replacement valid
+	// 	if (!$start.parent.canReplaceWith(index, $end.index(), nodeType)) {
+	// 		return null;
+	// 	}
+	// 	// perform replacement
+	// 	return state.tr.replaceRangeWith(
+	// 		start, end,
+	// 		nodeType.create(attrs, nodeType.schema.text(match[1]))
+	// 	);
+	// })
   
   withMeta(mathInlineInputRule, {
     displayName: 'InputRule<mathInline>',
