@@ -1,0 +1,43 @@
+.milkdown {
+    llamark-math-inline {
+        display: inline;
+
+        & > .math-inline-preview {
+            &.hidden {
+                display: none;
+            }
+
+            display: inline;
+        }
+
+        & > .math-inline-edit {
+            display: inline;
+
+            &.hidden {
+                display: none;
+            }
+
+            &> script {
+                display: inline;
+                color:#8421A2;
+            }
+
+            &> div > span.math-meta {
+                color: #888888;
+            }
+
+            &> div > span.math-content {
+                color:#8421A2;
+            }
+
+            & > .ProseMirror {
+                padding: 0;
+                
+                display: inline;
+            }
+
+        }
+
+        
+    }
+}
