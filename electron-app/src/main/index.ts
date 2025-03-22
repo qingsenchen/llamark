@@ -5,10 +5,9 @@ import icon from '../../resources/icon.png?asset'
 import dockIcon from '../../resources/icon.a.png?asset'
 import { getLlama, LlamaChatSession } from 'node-llama-cpp'
 import llamaPath from '../../../models/qwen2.5-1.5b-instruct-q4_k_m.gguf?asset'
-import { FileInvoker } from './invoker/file-invoker'
-import { OpenFileCommand, SaveFileCommand } from './commands'
+import { FileManager } from './invoker/file-manager'
 
-const invoker = new FileInvoker()
+const fileManager = new FileManager()
 
 function createMenu(mainWindow): void {
   const isMac = process.platform === 'darwin'
@@ -37,20 +36,18 @@ function createMenu(mainWindow): void {
       {
         label: 'New',
         accelerator: '',
-        click: (): void => {
-          BrowserWindow.getFocusedWindow()?.webContents.send('electron:getMarkdown', 'new')
+        click: async (): Promise<void> => {
+          await fileManager.newFile()
+          return await mainWindow.webContents.send('llamark::setMarkdown', fileManager.getFileInfo().fileContent)
         }
       },
       {
         label: 'Open File',
         accelerator: '',
         click: async (): Promise<void> => {
-          
-          const command = new OpenFileCommand();
-          const content = await invoker.executeCommand(command);
-          if (! content) return
-
-          return await mainWindow.webContents.send('llamark::setMarkdown', content)
+          await fileManager.openFile(mainWindow)
+          console.log(fileManager.getFileInfo().fileContent)
+          return await mainWindow.webContents.send('llamark::setMarkdown', fileManager.getFileInfo().fileContent)
         }
       },
       {
@@ -59,10 +56,22 @@ function createMenu(mainWindow): void {
         click: async (): Promise<void> => {
 
           ipcMain.handleOnce('electron::getMarkdown', async (_event, content) => {
-            const command = new SaveFileCommand(content);
-            return await invoker.executeCommand(command);
+            fileManager.setContent(content)
+            await fileManager.saveFile(mainWindow)
+            return await fileManager.saveFile(mainWindow)
           })
+          return await mainWindow.webContents.send('llamark::getMarkdown')
+        }
+      },
+      {
+        label: 'Save As...',
+        click: async (): Promise<void> => {
 
+          ipcMain.handleOnce('electron::getMarkdown', async (_event, content) => {
+            fileManager.setContent(content)
+            await fileManager.saveFile(mainWindow)
+            return await fileManager.saveFileAs(mainWindow)
+          })
           return await mainWindow.webContents.send('llamark::getMarkdown')
         }
       },
@@ -139,8 +148,6 @@ function createWindow(): void {
       sandbox: false
     }
   })
-
-  
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
