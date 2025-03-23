@@ -13,9 +13,11 @@ function createMenu(mainWindow): void {
   const isMac = process.platform === 'darwin'
   const template: Electron.MenuItemConstructorOptions[] = []
 
+  fileManager.getRecentFiles().forEach(()=> { return {} })
+
   if (isMac) {
     template.push({
-      label: app.name,
+      label: 'Llamark',
       submenu: [
         { role: 'about' },
         { type: 'separator' },
@@ -51,6 +53,11 @@ function createMenu(mainWindow): void {
         }
       },
       {
+        label: 'Recent Files',
+        submenu: [] // 这里会自动填充最近打开的文件列表
+      },
+      { type: 'separator' },
+      {
         label: 'Save',
         accelerator: 'Cmd+S',
         click: async (): Promise<void> => {
@@ -75,6 +82,7 @@ function createMenu(mainWindow): void {
           return await mainWindow.webContents.send('llamark::getMarkdown')
         }
       },
+      { type: 'separator' },
       isMac ? { role: 'close' } : { role: 'quit' }
     ]
   })
@@ -121,6 +129,7 @@ function createMenu(mainWindow): void {
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
+  fileManager.updateRecentFilesMenu()
 }
 
 let iconPath
