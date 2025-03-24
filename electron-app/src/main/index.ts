@@ -1,15 +1,15 @@
 import { app, Menu, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
+import path, { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import dockIcon from '../../resources/icon.a.png?asset'
 import { getLlama, LlamaChatSession } from 'node-llama-cpp'
-import llamaPath from '../../../models/qwen2.5-1.5b-instruct-q4_k_m.gguf?asset'
+import llamaPath from '../../../models/qwen2.5-0.5b-instruct-q4_k_m.gguf?asset'
 import { FileManager } from './invoker/file-manager'
 
 const fileManager = new FileManager()
 
-function createMenu(mainWindow): void {
+function updateMenu(mainWindow): void {
   const isMac = process.platform === 'darwin'
   const template: Electron.MenuItemConstructorOptions[] = []
 
@@ -47,14 +47,19 @@ function createMenu(mainWindow): void {
         label: 'Open File',
         accelerator: '',
         click: async (): Promise<void> => {
-          await fileManager.openFile(mainWindow)
+          const result = await fileManager.openFile(mainWindow)
+          if (result && result.canceled) return
           console.log(fileManager.getFileInfo().fileContent)
+          updateMenu(mainWindow)
           return await mainWindow.webContents.send('llamark::setMarkdown', fileManager.getFileInfo().fileContent)
         }
       },
       {
         label: 'Recent Files',
-        submenu: [] // 这里会自动填充最近打开的文件列表
+        submenu: fileManager.getRecentFiles().map((fileInfo) => ({
+          label: path.basename(fileInfo.path), // 显示文件名
+          click: () => fileManager.openFile(mainWindow), // 点击时打开文件
+        })),
       },
       { type: 'separator' },
       {
@@ -79,6 +84,7 @@ function createMenu(mainWindow): void {
             await fileManager.saveFile(mainWindow)
             return await fileManager.saveFileAs(mainWindow)
           })
+          updateMenu(mainWindow)
           return await mainWindow.webContents.send('llamark::getMarkdown')
         }
       },
@@ -129,7 +135,6 @@ function createMenu(mainWindow): void {
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
-  fileManager.updateRecentFilesMenu()
 }
 
 let iconPath
@@ -175,7 +180,7 @@ function createWindow(): void {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 
-  createMenu(mainWindow)
+  updateMenu(mainWindow)
 }
 
 async function chat(_event: Electron.IpcMainInvokeEvent, userPrompt: string): Promise<string> {

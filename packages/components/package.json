@@ -23,6 +23,12 @@
     "./code-block": {
       "import": "./src/code-block/index.ts"
     },
+    "./math-block": {
+      "import": "./src/math-block/index.ts"
+    },
+    "./math-inline": {
+      "import": "./src/math-inline/index.ts"
+    },
     "./list-item-block": {
       "import": "./src/list-item-block/index.ts"
     },
@@ -56,6 +62,14 @@
         "types": "./lib/code-block/index.d.ts",
         "import": "./lib/code-block/index.es.js"
       },
+      "./math-block": {
+        "types": "./lib/math-block/index.d.ts",
+        "import": "./lib/math-block/index.es.js"
+      },
+      "./math-inline": {
+        "types": "./lib/math-inline/index.d.ts",
+        "import": "./lib/math-inline/index.es.js"
+      },
       "./list-item-block": {
         "types": "./lib/list-item-block/index.d.ts",
         "import": "./lib/list-item-block/index.es.js"
@@ -84,6 +98,12 @@
         ],
         "code-block": [
           "./lib/code-block/index.d.ts"
+        ],
+        "math-block": [
+          "./lib/math-block/index.d.ts"
+        ],
+        "math-inline": [
+          "./lib/math-inline/index.d.ts"
         ],
         "list-item-block": [
           "./lib/list-item-block/index.d.ts"
@@ -132,8 +152,10 @@
     "@milkdown/exception": "workspace:*",
     "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.throttle": "^4.1.9",
+    "@types/katex": "^0.16.0",
     "atomico": "^1.75.1",
     "clsx": "^2.0.0",
+    "katex": "^0.16.0",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "tslib": "^2.5.0",

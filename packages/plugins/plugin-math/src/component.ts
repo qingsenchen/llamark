@@ -164,7 +164,6 @@ export const inlineMathComponent: Component<InlineMathComponentProps> = ({
   }, [maybeEscape])
 
   const onInput = useCallback((e: InputEvent) => {
-debugger
     //console.log(e.data, refMathInlineEdit.current?.querySelector('script')?.innerText)
     //const value = refMathInlineEdit.current?.querySelector('script')?.innerText
     const value = refMathInlineEdit.current?.innerText
@@ -177,11 +176,6 @@ debugger
     }
     
   })
-
-
-
-
-
 
   useEffect(() => {
     

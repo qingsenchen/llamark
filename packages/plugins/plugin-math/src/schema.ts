@@ -7,8 +7,6 @@ import { withMeta } from './__internal__/meta'
 import { Fragment } from '@milkdown/prose/model'
 import { InputRule } from '@milkdown/prose/inputrules'
 import { expectDomTypeError } from '@milkdown/exception'
-import { nodeRule } from '@milkdown/prose'
-import { llamarkInputRules } from '@milkdown/prose'
 import { NodeSelection } from '@milkdown/prose/state'
 
 
@@ -119,7 +117,7 @@ import { NodeSelection } from '@milkdown/prose/state'
   export const mathInlineInputRule = $inputRule(ctx => new InputRule(
     /(?:\$)([^$]+)(?:\$)$/,
     (state, _match, start, end) => {
-      
+      debugger
       const $start = state.doc.resolve(start)
 
       if ($start.node().type.name === mathInlineId) return null

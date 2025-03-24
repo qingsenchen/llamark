@@ -37,7 +37,7 @@ export class FileManager {
       this.filePath = result.filePaths[0]
       this.fileContent = fs.readFileSync(this.filePath, 'utf-8')
       this.addRecentFile(this.filePath)
-      this.updateRecentFilesMenu()
+      //this.updateRecentFilesMenu()
       app.addRecentDocument(this.filePath)
       console.log("File opened:", this.filePath);
     }
@@ -63,7 +63,7 @@ export class FileManager {
       this.filePath = result.filePath
       this.saveFile(window)
       this.addRecentFile(this.filePath)
-      this.updateRecentFilesMenu()
+      //this.updateRecentFilesMenu()
       app.addRecentDocument(this.filePath)
     }
   }
@@ -111,11 +111,12 @@ export class FileManager {
     if (!fileMenu || !fileMenu.submenu) return;
 
     let recentSubMenu = fileMenu.submenu.items.find(item => item.label === "Recent Files")?.submenu;
+    
     if (!recentSubMenu) {
       recentSubMenu = new Menu();
       fileMenu.submenu.append(new MenuItem({ label: "Recent Files", submenu: recentSubMenu }));
     }
-    
+ 
     if (this.recentFiles.length > 0) {
       this.recentFiles.forEach(file => {
         recentSubMenu.append(new MenuItem({

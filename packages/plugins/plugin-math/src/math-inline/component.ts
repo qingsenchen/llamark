@@ -13,7 +13,7 @@ export interface Attrs {
 export type MathInlineComponentProps = Attrs & {
   setAttr: <T extends keyof Attrs>(attr: T, value: Attrs[T]) => void
   maybeEscape: (unit: 'line' | 'char', dir: -1 | 1) => boolean
-  isEditorReadonly: () => boolean
+  //isEditorReadonly: () => boolean
   onChange: (latex: string) => void
   editView: EditorView
   selected: boolean
@@ -44,22 +44,52 @@ export const mathInlineComponent: Component<MathInlineComponentProps> = ({
   const dom = document.createElement('span')
   dom.dataset.type = 'mathInlineId'
 
-
-  useEffect(() => {
+  let renderKatex = useMemo(() => {
     
-    dom.dataset.value = tex
-    katex.render(tex, dom)
-    refMathInlinePreview.current?.appendChild(dom)
-  }, [])
+    try {
+      const renderString = katex.renderToString(tex)
 
-  useEffect(() => {
-    refMathInlinePreview.current.innerHTML = ''
-    const dom = document.createElement('span')
-    dom.dataset.type = 'mathInlineId'
-    dom.dataset.value = tex
-    katex.render(tex, dom)
-    refMathInlinePreview.current?.appendChild(dom)
-  }, [tex])
+      return renderString
+    } catch (error) {
+      if (error instanceof katex.ParseError || error instanceof TypeError) {
+        
+        return error.message
+      }
+
+      throw error;
+    }
+  }, [tex]);
+
+  // useEffect(() => {
+    
+  //   dom.dataset.value = tex
+  //   try {
+  //     const renderString = katex.render(tex, dom)
+  //     refMathInlinePreview.current?.appendChild(dom)
+  //     return renderString
+  //   } catch (error) {
+  //     if (error instanceof katex.ParseError || error instanceof TypeError) {
+  //       debugger
+  //     }
+  //   }
+
+  // }, [])
+
+  // useEffect(() => {
+  //   refMathInlinePreview.current.innerHTML = ''
+  //   const dom = document.createElement('span')
+  //   dom.dataset.type = 'mathInlineId'
+  //   dom.dataset.value = tex
+  //   try {
+  //     const renderString = katex.render(tex, dom)
+  //     refMathInlinePreview.current?.appendChild(dom)
+  //     return renderString
+  //   } catch (error) {
+  //     if (error instanceof katex.ParseError || error instanceof TypeError) {
+  //       debugger
+  //     }
+  //   }
+  // }, [tex])
 
   useEffect(() => {
     setTex(latex)
@@ -79,6 +109,7 @@ export const mathInlineComponent: Component<MathInlineComponentProps> = ({
   <host class=${clsx(selected && 'selected', !latex && 'empty')}>
     <div class="math-inline-preview ${clsx(selected && 'hidden')}" 
       ref=${refMathInlinePreview}
+      innerHTML=${renderKatex}
       onclick=${() => setReadOnly(false)}>
     </div>
     <div class="math-inline-edit ${clsx(!selected && 'hidden')}">
@@ -95,7 +126,7 @@ mathInlineComponent.props = {
   preview: Boolean,
   setAttr: Function,
   onChange: Function,
-  isEditorReadonly: Boolean,
+  //isEditorReadonly: Boolean,
   maybeEscape: Function,
   config: Object,
 }

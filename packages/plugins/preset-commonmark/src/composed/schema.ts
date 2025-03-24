@@ -26,6 +26,9 @@ import {
   paragraphAttr,
   paragraphSchema,
   textSchema,
+
+  mathBlockAttr,
+  mathBlockSchema,
 } from '../node'
 
 /// @internal
@@ -47,6 +50,9 @@ export const schema: MilkdownPlugin[] = [
 
   codeBlockAttr,
   codeBlockSchema,
+
+  mathBlockAttr,
+  mathBlockSchema,
 
   hrAttr,
   hrSchema,
