@@ -104,8 +104,10 @@ export const createMathBlockInputRule = $inputRule(ctx => new InputRule(
     if (!$start.node(-1).canReplaceWith($start.index(-1), $start.indexAfter(-1), mathBlockSchema.type(ctx)))
       return null
     
-    let tr = state.tr.delete(start, end).replaceSelectionWith(mathBlockSchema.type(ctx).create({}))
-    tr.setSelection(NodeSelection.create(tr.doc, start-1)).scrollIntoView()
+    let tr = state.tr.delete(start, end)
+    .setBlockType(start, start, mathBlockSchema.type(ctx), {})
+    //.replaceSelectionWith(mathBlockSchema.type(ctx).create({}))
+    //tr.setSelection(NodeSelection.create(tr.doc, start-1))
 
     // const side = -1
     // let $head = tr.selection.$head
@@ -116,7 +118,7 @@ export const createMathBlockInputRule = $inputRule(ctx => new InputRule(
     //   tr = tr.setSelection(nextPos).scrollIntoView()
     // }
     
-    return tr
+    return tr.setSelection(NodeSelection.create(tr.doc, tr.mapping.map($start.pos - 1)))
   },
 ))
 

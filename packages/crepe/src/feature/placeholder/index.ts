@@ -5,7 +5,8 @@ import type { Node } from '@milkdown/kit/prose/model'
 import { Decoration, DecorationSet } from '@milkdown/kit/prose/view'
 import { findParent } from '@milkdown/kit/prose'
 import type { DefineFeature } from '../shared'
-import { isInCodeBlock, isInList } from '../../utils'
+import { isInCodeBlock, isInList, isInMathBlock } from '../../utils'
+import { stat } from 'fs'
 
 function isDocEmpty(doc: Node) {
   return doc.childCount <= 1 && !doc.firstChild?.content.size
@@ -57,7 +58,7 @@ export const placeholderPlugin = $prose((ctx) => {
         if (config.mode === 'doc' && !isDocEmpty(state.doc))
           return null
 
-        if (isInCodeBlock(state.selection) || isInList(state.selection))
+        if (isInCodeBlock(state.selection) || isInList(state.selection) || isInMathBlock(state.selection))
           return null
 
         const placeholderText = config.text ?? 'Please enter...'

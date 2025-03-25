@@ -49,16 +49,22 @@ export class LlamarkMathBlock implements NodeView {
 
     this.dom = this.createDom()
     this.dom.focused = this.node.attrs.focused
+    this.cm.dom.addEventListener('blur', () => {
+      debugger
+      this.dom.focused = false
+    })
     // 绑定拖拽事件
     this.updateLanguage()   
   }
 
   private forwardUpdate = (update: ViewUpdate) => {
 
-    // if (update.focusChanged && this.dom.focused !== this.cm.hasFocus) {
-    //   this.dom.focused = this.cm.hasFocus
-
-    // }
+    if (update.focusChanged && this.dom.focused !== this.cm.hasFocus) {
+      //this.dom.focused = this.cm.hasFocus
+      if(!this.cm.hasFocus) {
+        this.dom.focused = false
+      }
+    }
 
     if (this.updating || !this.cm.hasFocus)
       return
@@ -228,10 +234,8 @@ export class LlamarkMathBlock implements NodeView {
 
   selectNode() {
     this.dom.selected = true
-    this.setFocused(true)
-
-    this.cm.focus()
-
+    //this.setSelection(0, 0)
+    setTimeout(()=> this.cm.focus(), 100)
   }
 
   deselectNode() {

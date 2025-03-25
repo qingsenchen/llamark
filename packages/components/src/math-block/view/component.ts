@@ -39,7 +39,7 @@ export const mathComponent: Component<MathComponentProps> = ({
   const [filter, setFilter] = useState('')
   const [showPicker, setShowPicker] = useState(false)
   const [formula, setFormula] = useProp('content')
-  const [hasFocus, setHasFocus] = useState(focused)
+  const [hasFocus, setHasFocus] = useProp('focused')
 
   const root = useMemo(() => host.current.getRootNode() as HTMLElement, [host])
 
@@ -180,6 +180,14 @@ export const mathComponent: Component<MathComponentProps> = ({
     }
   }
 
+  const onPreviewClick = () => {
+    if (!hasFocus) {
+      setHasFocus(true)
+      codemirror?.focus()
+      codemirror?.dispatch({ selection: { anchor:0, head:0 } })
+    }
+  }
+
   const renderedLanguageList = useMemo(() => {
     if (!languages?.length)
       return html`<li class="language-list-item no-result">${config?.noResultText}</li>`
@@ -237,7 +245,7 @@ export const mathComponent: Component<MathComponentProps> = ({
       </div>
     </div>
     <div class=${clsx('codemirror-host', !hasFocus && 'hidden')}>${h(codemirror?.dom, {})}</div>
-    <div class="math-formula-preview" onmousedown=${()=> setFocused?.(true) } innerHTML=${renderKatex}>
+    <div class="math-formula-preview" onmousedown=${onPreviewClick} innerHTML=${renderKatex}>
     </div>
   </host>`
 }
