@@ -1,7 +1,7 @@
 # Llamark!
 
 <div align="center" id="sglangtop">
-<img src="https://github.com/qingsenchen/llamark/assets/llamark.jpg" alt="logo" width="400" margin="10px"></img>
+<img src="https://raw.githubusercontent.com/qingsenchen/llamark/master/assets/llamark.jpg" alt="logo" width="400" margin="10px"></img>
 </div>
 
 
