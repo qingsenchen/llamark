@@ -10,5 +10,5 @@ export * from './ordered-list'
 export * from './list-item'
 export * from './paragraph'
 export * from './text'
-
+export * from './math-block'
 export * from './html'

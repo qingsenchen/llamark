@@ -53,8 +53,11 @@
     "./plugin/trailing": "./src/plugin/trailing.ts",
     "./plugin/upload": "./src/plugin/upload.ts",
     "./plugin/math": "./src/plugin/math.ts",
+    
     "./component": "./src/component/index.ts",
     "./component/code-block": "./src/component/code-block.ts",
+    "./component/math-block": "./src/component/math-block.ts",
+    "./component/math-inline": "./src/component/math-inline.ts",
     "./component/image-block": "./src/component/image-block.ts",
     "./component/image-inline": "./src/component/image-inline.ts",
     "./component/link-tooltip": "./src/component/link-tooltip.ts",
@@ -210,6 +213,14 @@
         "types": "./lib/component/code-block.d.ts",
         "import": "./lib/component/code-block.js"
       },
+      "./component/math-block": {
+        "types": "./lib/component/math-block.d.ts",
+        "import": "./lib/component/math-block.js"
+      },
+      "./component/math-inline": {
+        "types": "./lib/component/math-inline.d.ts",
+        "import": "./lib/component/math-inline.js"
+      },
       "./component/image-block": {
         "types": "./lib/component/image-block.d.ts",
         "import": "./lib/component/image-block.js"
@@ -339,6 +350,12 @@
         "component/code-block": [
           "lib/component/code-block.d.ts"
         ],
+        "component/math-block": [
+          "lib/component/math-block.d.ts"
+        ],
+        "component/math-inline": [
+          "lib/component/math-inline.d.ts"
+        ],
         "component/image-block": [
           "lib/component/image-block.d.ts"
         ],
@@ -383,10 +400,10 @@
     "@milkdown/plugin-indent": "workspace:*",
     "@milkdown/plugin-listener": "workspace:*",
     "@milkdown/plugin-slash": "workspace:*",
+    "@milkdown/plugin-math": "workspace:*",
     "@milkdown/plugin-tooltip": "workspace:*",
     "@milkdown/plugin-trailing": "workspace:*",
     "@milkdown/plugin-upload": "workspace:*",
-    "@milkdown/plugin-math": "workspace:*",
     "@milkdown/preset-commonmark": "workspace:*",
     "@milkdown/preset-gfm": "workspace:*",
     "@milkdown/prose": "workspace:*",

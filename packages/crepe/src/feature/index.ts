@@ -9,6 +9,7 @@ import type { AssistantTooltipFeatureConfig } from './assistant-tooltip'
 import type { ListItemFeatureConfig } from './list-item'
 import type { ToolbarFeatureConfig } from './toolbar'
 import type { TableFeatureConfig } from './table'
+import type { LlamarkMathFeatureConfig } from './llamath'
 
 export enum CrepeFeature {
   CodeMirror = 'code-mirror',
@@ -21,6 +22,7 @@ export enum CrepeFeature {
   Toolbar = 'toolbar',
   Placeholder = 'placeholder',
   Table = 'table',
+  LlamarkMath = 'llamath',
 }
 
 export interface CrepeFeatureConfig {
@@ -34,6 +36,7 @@ export interface CrepeFeatureConfig {
   [CrepeFeature.Toolbar]?: ToolbarFeatureConfig
   [CrepeFeature.CodeMirror]?: CodeMirrorFeatureConfig
   [CrepeFeature.Table]?: TableFeatureConfig
+  [CrepeFeature.LlamarkMath]? : LlamarkMathFeatureConfig
 }
 
 export const defaultFeatures: Record<CrepeFeature, boolean> = {
@@ -46,7 +49,8 @@ export const defaultFeatures: Record<CrepeFeature, boolean> = {
   [CrepeFeature.Toolbar]: true,
   [CrepeFeature.CodeMirror]: true,
   [CrepeFeature.Table]: true,
-  [CrepeFeature.AssistantTooltip]: true
+  [CrepeFeature.AssistantTooltip]: true,
+  [CrepeFeature.LlamarkMath]: true
 }
 
 export async function loadFeature(feature: CrepeFeature, editor: Editor, config?: never) {
@@ -89,6 +93,10 @@ export async function loadFeature(feature: CrepeFeature, editor: Editor, config?
     }
     case CrepeFeature.Table: {
       const { defineFeature } = await import('./table')
+      return defineFeature(editor, config)
+    }
+    case CrepeFeature.LlamarkMath: {
+      const { defineFeature } = await import('./llamath')
       return defineFeature(editor, config)
     }
   }

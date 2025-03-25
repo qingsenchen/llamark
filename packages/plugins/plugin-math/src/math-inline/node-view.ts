@@ -115,9 +115,10 @@ export class MathInlineView implements NodeView {
     }
 
     private createDom() {
+        debugger
         const dom = document.createElement('llamark-math-inline') as HTMLElement & MathInlineComponentProps
         dom.setAttr = this.setAttr
-        dom.isEditorReadonly = () => !this.view.editable
+        //dom.isEditorReadonly = () => !this.view.editable
         dom.editView = this.innerView
         const {
             ...viewConfig
@@ -145,7 +146,7 @@ export class MathInlineView implements NodeView {
 
         // if (this.updating)
         //     return true
-debugger
+
         if (!node.sameMarkup(this.node)) return false
 
         this.node = node
